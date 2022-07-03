@@ -19,7 +19,11 @@ func startRead() {
 
 }
 
-func readIdentifier() tview.Primitive {
+func readIdentifier(resultView tview.Primitive) tview.Primitive {
+	if resultView == nil {
+		resultView = tview.NewBox()
+	}
+
 	identifier := ""
 
 	view := tview.NewForm()
@@ -27,7 +31,7 @@ func readIdentifier() tview.Primitive {
 	view.AddInputField("Identifier", "", 100, nil, func(text string) {
 		if text == "" {
 			m := modal("Error - Invalid args", "Identifier cannot be blank!", func(buttonIndex int, buttonLabel string) {
-				navigate(readIdentifier(), true)
+				navigate(readIdentifier(resultView), true)
 			})
 			navigate(m, true)
 		}
@@ -38,12 +42,16 @@ func readIdentifier() tview.Primitive {
 	view.AddButton("Submit", func() {
 		r := repo.Read(identifier, "")
 		results <- r
-		navigate(readResults(tview.NewBox()), true)
+		navigate(readResults(resultView, nil), true)
 	})
 	return view
 }
 
-func readDestination() tview.Primitive {
+func readDestination(resultView tview.Primitive) tview.Primitive {
+	if resultView == nil {
+		resultView = tview.NewBox()
+	}
+
 	destination := ""
 
 	view := tview.NewForm()
@@ -51,7 +59,7 @@ func readDestination() tview.Primitive {
 	view.AddInputField("Destination", "", 100, nil, func(text string) {
 		if text == "" {
 			m := modal("Error - Invalid args", "Destination cannot be blank!", func(buttonIndex int, buttonLabel string) {
-				navigate(readIdentifier(), true)
+				navigate(readDestination(resultView), true)
 			})
 			navigate(m, true)
 		}
@@ -62,35 +70,44 @@ func readDestination() tview.Primitive {
 	view.AddButton("Submit", func() {
 		r := repo.Read("", destination)
 		results <- r
-		navigate(readResults(tview.NewBox()), true)
+		navigate(readResults(resultView, nil), true)
 	})
 	return view
 }
 
-func readAll() tview.Primitive {
+func readAll(resultView tview.Primitive) tview.Primitive {
+	if resultView == nil {
+		resultView = tview.NewBox()
+	}
+
 	results <- repo.Read("", "")
-	return readResults(tview.NewBox())
+	return readResults(resultView, nil)
 }
 
-func readResults(box tview.Primitive) tview.Primitive {
+func readDetails(id string, res []minify.Record) func() {
+	return func() {
+		details := repo.GetDetails(id)
+		text := fmt.Sprintf("Identifier : %v \nDestination: %v \n", details.ID, details.Destination)
+		for _, a := range details.Analytics {
+			text += fmt.Sprintf("%v", a.AccessedAt)
+		}
+		detailView := tview.NewTextView().SetText(text)
+		detailView.SetBorder(true).SetTitle("Read - Details")
+		results <- res
+		navigate(readResults(detailView, nil), true)
+	}
+}
+
+func readResults(box tview.Primitive, detailsFunc func()) tview.Primitive {
 	res := <-results
 	view := tview.NewFlex()
 	list := tview.NewList()
 	list.SetBorder(true).SetTitle("Read - Results")
 	for i, r := range res {
-		list.AddItem(r.Destination, "", rune(49+i), func(id string) func() {
-			return func() {
-				details := repo.GetDetails(id)
-				text := fmt.Sprintf("Identifier : %v \nDestination: %v \n", details.ID, details.Destination)
-				for _, a := range details.Analytics {
-					text += fmt.Sprintf("%v", a.AccessedAt)
-				}
-				detailView := tview.NewTextView().SetText(text)
-				detailView.SetBorder(true).SetTitle("Read - Details")
-				results <- res
-				navigate(readResults(detailView), true)
-			}
-		}(r.ID))
+		if detailsFunc == nil {
+			detailsFunc = readDetails(r.ID, res)
+		}
+		list.AddItem(r.Destination, "", rune(49+i), detailsFunc)
 	}
 	view.AddItem(list, 0, 1, true)
 	view.AddItem(box, 0, 3, false)

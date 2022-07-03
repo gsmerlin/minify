@@ -26,6 +26,18 @@ func defaults() []opts {
 			selected:      func() { startRead() },
 		},
 		{
+			mainText:      "Update",
+			secondaryText: "Update existing records",
+			shortcut:      'c',
+			selected:      func() { startUpdate() },
+		},
+		{
+			mainText:      "Delete",
+			secondaryText: "Delete existing records",
+			shortcut:      'c',
+			selected:      func() { startDelete() },
+		},
+		{
 			mainText:      "Quit",
 			secondaryText: "Press to exit",
 			shortcut:      'q',
@@ -42,20 +54,110 @@ func readOpts() []opts {
 			mainText:      "Identifier",
 			secondaryText: "Find record by identifier",
 			shortcut:      'a',
-			selected:      func() { navigate(readIdentifier(), true) },
+			selected:      func() { navigate(readIdentifier(nil), true) },
 		},
 		{
 			mainText:      "Destination",
 			secondaryText: "Find records by destination",
 			shortcut:      'b',
-			selected:      func() { navigate(readDestination(), true) },
+			selected:      func() { navigate(readDestination(nil), true) },
 		},
 		{
 			mainText:      "All records",
 			secondaryText: "List all records",
 			shortcut:      'c',
 			selected: func() {
-				navigate(readAll(), true)
+				navigate(readAll(nil), true)
+			},
+		},
+		{
+			mainText:      "Back",
+			secondaryText: "Return to main menu",
+			shortcut:      'c',
+			selected: func() {
+				mainMenu()
+			},
+		},
+		{
+			mainText:      "Quit",
+			secondaryText: "Exit application",
+			shortcut:      'q',
+			selected: func() {
+				app.Stop()
+			},
+		},
+	}
+}
+
+func updateOpts() []opts {
+	return []opts{
+		{
+			mainText:      "Identifier",
+			secondaryText: "Update via Identifier",
+			shortcut:      'a',
+			selected: func() {
+				navigate(updateByIdentifier(), true)
+			},
+		},
+		{
+			mainText:      "Destination",
+			secondaryText: "Update via Destination",
+			shortcut:      'b',
+			selected: func() {
+				navigate(updateByDestination(nil, nil), true)
+			},
+		},
+		{
+			mainText:      "All",
+			secondaryText: "Update by listing all entries",
+			shortcut:      'c',
+			selected: func() {
+				updateByAll()
+			},
+		},
+		{
+			mainText:      "Back",
+			secondaryText: "Return to main menu",
+			shortcut:      'c',
+			selected: func() {
+				mainMenu()
+			},
+		},
+		{
+			mainText:      "Quit",
+			secondaryText: "Exit application",
+			shortcut:      'q',
+			selected: func() {
+				app.Stop()
+			},
+		},
+	}
+}
+
+func deleteOpts() []opts {
+	return []opts{
+		{
+			mainText:      "Identifier",
+			secondaryText: "Delete via Identifier",
+			shortcut:      'a',
+			selected: func() {
+				navigate(deleteByIdentifier(), true)
+			},
+		},
+		{
+			mainText:      "Destination",
+			secondaryText: "Delete via Destination",
+			shortcut:      'b',
+			selected: func() {
+				navigate(deleteByDestination(nil, nil), true)
+			},
+		},
+		{
+			mainText:      "All",
+			secondaryText: "Delete by listing all entries",
+			shortcut:      'c',
+			selected: func() {
+				deleteByAll()
 			},
 		},
 		{

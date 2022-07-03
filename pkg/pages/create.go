@@ -21,6 +21,15 @@ func init() {
 	create.AddInputField("Destination URL: ", "", 255, nil, func(url string) { destination = url })
 
 	create.AddButton("Save", func() {
+
+		if destination == "" {
+			create.SetFocus(1)
+			navigate(modal("Error - Blank Destination", "Destination cannot be left blank!", func(buttonIndex int, buttonLabel string) {
+				navigate(create, true)
+			}), true)
+			return
+		}
+
 		id := repo.Create(destination, id)
 		CreateSuccess := modal("Create - Success", fmt.Sprintf("URL created with identifier %v!", id), func(buttonIndex int, buttonLabel string) {
 			mainMenu()
