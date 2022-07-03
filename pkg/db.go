@@ -39,7 +39,7 @@ func (r *Repository) InitDB() {
 	ErrorCheck(err)
 }
 
-func (r *Repository) Create(destination string, id string) string {
+func (r *Repository) Create(id string, destination string) string {
 	if id == "" {
 		id = randSeq(10)
 	}

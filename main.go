@@ -2,10 +2,10 @@ package main
 
 import (
 	minify "github.com/gsmerlin/minify/pkg"
-	"github.com/gsmerlin/minify/pkg/pages"
+	"github.com/gsmerlin/minify/pkg/ui"
 )
 
 func main() {
 	minify.StartServer()
-	pages.Start()
+	ui.StartDashboard()
 }
