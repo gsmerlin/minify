@@ -1,8 +1,7 @@
 package db
 
 import (
-	"log"
-
+	"github.com/gsmerlin/minify/internal/logger"
 	"github.com/gsmerlin/minify/internal/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -10,6 +9,7 @@ import (
 
 type Record struct {
 	ID          string
+	Email       string
 	Destination string
 }
 
@@ -24,27 +24,32 @@ type Details struct {
 
 var r *gorm.DB
 
-func InitDB() {
-	log.Println("Initializing database connection...")
+func Start() {
+	logger.Info("Initializing database connection...")
 	dsn := "root:root@tcp(127.0.0.1:3306)/minify?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
 	r, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	utils.ErrorCheck(err)
-	log.Println("Database connection successfully initialized")
+	if err != nil {
+		logger.Error(err.Error())
+	}
+	logger.Info("Database connection successfully initialized")
 }
 
-func NewLink(id string, destination string) string {
+func NewLink(id string, email string, destination string) string {
 	if id == "" {
-		id = utils.RandSeq(10)
+		id = utils.RandSeq(3)
 	}
 
 	record := Record{
 		ID:          id,
+		Email:       email,
 		Destination: destination,
 	}
 
 	result := r.Create(&record)
-	utils.ErrorCheck(result.Error)
+	if result.Error != nil {
+		logger.Error(result.Error.Error())
+	}
 	return record.ID
 }
 
@@ -61,26 +66,33 @@ func GetLink(id string, destination string) []Record {
 		return records
 	}
 
-	r.Find(&records)
+	result := r.Find(&records)
+	if result.Error != nil {
+		logger.Error(result.Error.Error())
+	}
 	return records
 }
 
-func Update(rec Record) {
+func UpdateLink(rec Record) {
 	result := r.Save(rec)
-	utils.ErrorCheck(result.Error)
+	if result.Error != nil {
+		logger.Error(result.Error.Error())
+	}
 }
 
 func DeleteLink(id string) {
 	result := r.Delete(Record{ID: id})
-	utils.ErrorCheck(result.Error)
+	if result.Error != nil {
+		logger.Error(result.Error.Error())
+	}
 }
 
 func AddAnalytics(id string) error {
 	result := r.Save(&Analytics{ID: id})
 	if result.Error != nil {
-		return result.Error
+		logger.Error(result.Error.Error())
 	}
-	return nil
+	return result.Error
 }
 
 func GetDetails(id string) Details {

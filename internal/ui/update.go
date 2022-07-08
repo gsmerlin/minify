@@ -35,7 +35,7 @@ func getUpdateForm(r db.Record, view tview.Primitive) tview.Primitive {
 }
 
 func updateRecord(r db.Record, view tview.Primitive) {
-	db.Update(r)
+	db.UpdateLink(r)
 	callModal("Success!", "Record successfully updated!", func(i int, s string) { navigate(view, true) })
 }
 
