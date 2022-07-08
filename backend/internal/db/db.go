@@ -111,7 +111,7 @@ func AddAnalytics(id string) error {
 	return result.Error
 }
 
-func GetDetails(id string) Details {
+func GetAnalytics(id string) Details {
 
 	var record Record
 	var analytics []Analytics

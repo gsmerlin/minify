@@ -57,7 +57,34 @@ import (
 					c. Destination: The destination URL to be redirected to
 				iii. Updates the link in the database.
 				iv. Returns the ID of the link.
-
+	4. Create minify UI (***TO-DO***)
+		UI Should allow you to perform all operations (create, view, update and delete links)
+		as well as seeing analytics per links, and turn on/off server logs.
+	5. Create tests (***TO-DO***)
+		Packages:
+			a) db (***TO-DO***)
+				i. NewLink (***TO-DO***)
+				ii. GetLink (***TO-DO***)
+				iii. UpdateLink (***TO-DO***)
+				iv. DeleteLink (***TO-DO***)
+				v. AddAnalytics (***TO-DO***)
+				vi. GetAnalytics (***TO-DO***)
+			b) server (***TO-DO***)
+				i. handlers (***TO-DO***)
+					1. Redirect (***TO-DO***)
+					2. Create (***TO-DO***)
+					3. Get (***TO-DO***)
+					4. Update (***TO-DO***)
+					5. Delete (***TO-DO***)
+			c) ui (***TO-DO***)
+				Not sure what to test here. UI can probably be tested manually.
+					Maybe test the helper functions?
+			d) utils (***TO-DO***)
+				i. RandSeq (***TO-DO***)
+			e) logger (***TO-DO***)
+				i. Info (***TO-DO***)
+				ii. Error (***TO-DO***)
+				iii. Success (***TO-DO***)
 
 
 */
