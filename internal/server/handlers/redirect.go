@@ -12,10 +12,10 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 	link := r.RequestURI[1:]
 	logger.Info(fmt.Sprintf("Received request for: %v", link))
 	logger.Info("Checking if record exists...")
-	records := db.GetLink(link, "")
-	if len(records) == 0 {
-		logger.Error("Record not found.")
-		w.Write([]byte("404 Not Found"))
+	records, err := db.GetLink(link, "")
+	if err != nil {
+		logger.Error(err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

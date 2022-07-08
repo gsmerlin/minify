@@ -35,7 +35,7 @@ func Start() {
 	logger.Info("Database connection successfully initialized")
 }
 
-func NewLink(id string, email string, destination string) string {
+func NewLink(id string, email string, destination string) (string, error) {
 	if id == "" {
 		id = utils.RandSeq(3)
 	}
@@ -48,43 +48,59 @@ func NewLink(id string, email string, destination string) string {
 
 	result := r.Create(&record)
 	if result.Error != nil {
-		logger.Error(result.Error.Error())
+		return "", result.Error
 	}
-	return record.ID
+	return record.ID, nil
 }
 
-func GetLink(id string, destination string) []Record {
+func GetLink(id string, destination string) ([]Record, error) {
 	var records []Record
 
-	if id != "" {
-		r.First(&records, "id = ?", id)
-		return records
+	if id != "" && destination == "" {
+		result := r.First(&records, "id = ?", id)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+		return records, nil
 	}
 
-	if destination != "" {
-		r.Find(&records, "destination = ?", destination)
-		return records
+	if destination != "" && id == "" {
+		result := r.Find(&records, "destination = ?", destination)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		return records, nil
 	}
 
 	result := r.Find(&records)
+
 	if result.Error != nil {
-		logger.Error(result.Error.Error())
+		return nil, result.Error
 	}
-	return records
+	return records, nil
 }
 
-func UpdateLink(rec Record) {
-	result := r.Save(rec)
-	if result.Error != nil {
-		logger.Error(result.Error.Error())
+func UpdateLink(id string, email string, destination string) (string, error) {
+	record := Record{
+		ID:          id,
+		Email:       email,
+		Destination: destination,
 	}
+	result := r.Save(&record)
+	if result.Error != nil {
+		return "", result.Error
+	}
+	return record.ID, nil
 }
 
-func DeleteLink(id string) {
+func DeleteLink(id string) (string, error) {
 	result := r.Delete(Record{ID: id})
 	if result.Error != nil {
-		logger.Error(result.Error.Error())
+		return "", result.Error
 	}
+
+	return id, nil
 }
 
 func AddAnalytics(id string) error {

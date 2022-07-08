@@ -7,18 +7,19 @@ import (
 	"github.com/gsmerlin/minify/internal/logger"
 )
 
-type CreateLinkInput struct {
+type EditLinkInput struct {
+	ID          string `json:"id"`
 	Destination string `json:"destination"`
 	Email       string `json:"email"`
 }
 
-type CreateLinkOutput struct {
+type EditLinkOutput struct {
 	ID string `json:"id"`
 }
 
-func CreateLink(w http.ResponseWriter, r *http.Request) {
+func EditLink(w http.ResponseWriter, r *http.Request) {
 
-	var payload CreateLinkInput
+	var payload EditLinkInput
 
 	if err := Decode(r.Body, &payload); err != nil {
 		logger.Error(err.Error())
@@ -26,9 +27,9 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logger.Info("Creating link for " + payload.Email + " to " + payload.Destination)
+	logger.Info("Editing link for " + payload.Email + " to " + payload.Destination)
 
-	id, err := db.NewLink("", payload.Email, payload.Destination)
+	id, err := db.UpdateLink(payload.ID, payload.Email, payload.Destination)
 
 	if err != nil {
 		logger.Error(err.Error())
@@ -36,7 +37,7 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	output := CreateLinkOutput{ID: id}
+	output := EditLinkOutput{ID: id}
 
 	if err := Encode(w, output); err != nil {
 		logger.Error(err.Error())
