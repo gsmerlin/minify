@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"github.com/gsmerlin/minify/internal/db"
+	"github.com/gsmerlin/minify/backend/internal/db"
 	"github.com/rivo/tview"
 )
 

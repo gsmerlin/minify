@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 
-	"github.com/gsmerlin/minify/internal/db"
-	"github.com/gsmerlin/minify/internal/logger"
-	"github.com/gsmerlin/minify/internal/server"
-	"github.com/gsmerlin/minify/internal/ui"
+	"github.com/gsmerlin/minify/backend/internal/db"
+	"github.com/gsmerlin/minify/backend/internal/logger"
+	"github.com/gsmerlin/minify/backend/internal/server"
+	"github.com/gsmerlin/minify/backend/internal/ui"
 )
 
 /*

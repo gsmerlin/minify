@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/gsmerlin/minify/internal/logger"
-	"github.com/gsmerlin/minify/internal/utils"
+	"github.com/gsmerlin/minify/backend/internal/logger"
+	"github.com/gsmerlin/minify/backend/internal/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

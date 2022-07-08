@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gsmerlin/minify/internal/db"
-	"github.com/gsmerlin/minify/internal/logger"
+	"github.com/gsmerlin/minify/backend/internal/db"
+	"github.com/gsmerlin/minify/backend/internal/logger"
 )
 
 type DeleteLinkOutput struct {

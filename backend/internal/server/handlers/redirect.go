@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gsmerlin/minify/internal/db"
-	"github.com/gsmerlin/minify/internal/logger"
+	"github.com/gsmerlin/minify/backend/internal/db"
+	"github.com/gsmerlin/minify/backend/internal/logger"
 )
 
 func Redirect(w http.ResponseWriter, r *http.Request) {

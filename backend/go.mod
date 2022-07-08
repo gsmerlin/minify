@@ -1,4 +1,4 @@
-module github.com/gsmerlin/minify
+module github.com/gsmerlin/backend/minify
 
 go 1.18
 

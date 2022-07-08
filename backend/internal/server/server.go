@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/gsmerlin/minify/internal/logger"
-	"github.com/gsmerlin/minify/internal/server/handlers"
+	"github.com/gsmerlin/minify/backend/internal/logger"
+	"github.com/gsmerlin/minify/backend/internal/server/handlers"
 )
 
 func favicon(w http.ResponseWriter, r *http.Request) {
