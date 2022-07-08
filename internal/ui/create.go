@@ -1,7 +1,7 @@
 package ui
 
 import (
-	minify "github.com/gsmerlin/minify/pkg"
+	"github.com/gsmerlin/minify/internal/db"
 	"github.com/rivo/tview"
 )
 
@@ -39,6 +39,6 @@ func createRecord(id string, destination string) {
 		return
 	}
 
-	minify.Repo().Create(id, destination)
+	db.NewLink(id, destination)
 	callModal("Success!", "Record successfully created!", func(i int, s string) { navigate(emptyView(), false) })
 }

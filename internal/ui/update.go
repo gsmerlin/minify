@@ -1,7 +1,7 @@
 package ui
 
 import (
-	minify "github.com/gsmerlin/minify/pkg"
+	"github.com/gsmerlin/minify/internal/db"
 	"github.com/rivo/tview"
 )
 
@@ -20,7 +20,7 @@ func update() {
 	navigate(emptyView(), false)
 }
 
-func getUpdateForm(r minify.Record, view tview.Primitive) tview.Primitive {
+func getUpdateForm(r db.Record, view tview.Primitive) tview.Primitive {
 	form := tview.NewForm()
 
 	form.AddInputField("Destination", r.Destination, 50, func(textToCheck string, lastChar rune) bool { return textToCheck != "" }, func(text string) {
@@ -34,8 +34,8 @@ func getUpdateForm(r minify.Record, view tview.Primitive) tview.Primitive {
 	return form
 }
 
-func updateRecord(r minify.Record, view tview.Primitive) {
-	minify.Repo().Update(r)
+func updateRecord(r db.Record, view tview.Primitive) {
+	db.Update(r)
 	callModal("Success!", "Record successfully updated!", func(i int, s string) { navigate(view, true) })
 }
 
@@ -55,7 +55,7 @@ func updateResults() {
 	list := tview.NewList()
 	for _, r := range res {
 		var blankRune rune
-		list.AddItem("ID: "+r.ID, "", blankRune, func(r minify.Record) func() {
+		list.AddItem("ID: "+r.ID, "", blankRune, func(r db.Record) func() {
 			return func() {
 				flex.Clear()
 				flex.AddItem(list, 0, 1, false)

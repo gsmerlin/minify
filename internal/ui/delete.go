@@ -1,7 +1,7 @@
 package ui
 
 import (
-	minify "github.com/gsmerlin/minify/pkg"
+	"github.com/gsmerlin/minify/internal/db"
 	"github.com/rivo/tview"
 )
 
@@ -20,7 +20,7 @@ func delete() {
 	navigate(emptyView(), false)
 }
 
-func getDeleteForm(r minify.Record, v tview.Primitive) tview.Primitive {
+func getDeleteForm(r db.Record, v tview.Primitive) tview.Primitive {
 	flex := tview.NewFlex()
 	flex.SetDirection(tview.FlexRow)
 	text := tview.NewTextView()
@@ -29,7 +29,7 @@ func getDeleteForm(r minify.Record, v tview.Primitive) tview.Primitive {
 		"Identifier: " + r.ID + "\n" + "Destination: " + r.Destination + "\n")
 
 	form := tview.NewForm()
-	form.AddButton("OK", func(r minify.Record) func() { return func() { deleteRecord(r, v) } }(r))
+	form.AddButton("OK", func(r db.Record) func() { return func() { deleteRecord(r, v) } }(r))
 	form.AddButton("Cancel", func() { navigate(v, false) })
 	form.SetButtonsAlign(tview.AlignCenter)
 	flex.AddItem(text, 0, 1, false)
@@ -37,8 +37,8 @@ func getDeleteForm(r minify.Record, v tview.Primitive) tview.Primitive {
 	return flex
 }
 
-func deleteRecord(r minify.Record, v tview.Primitive) {
-	minify.Repo().Delete(r.ID)
+func deleteRecord(r db.Record, v tview.Primitive) {
+	db.DeleteLink(r.ID)
 	callModal("Success!", "Record successfully deleted!", func(i int, s string) {
 		navigate(v, true)
 	})
@@ -60,7 +60,7 @@ func deleteResults() {
 	list := tview.NewList()
 	for _, r := range res {
 		var blankRune rune
-		list.AddItem("ID: "+r.ID, "", blankRune, func(r minify.Record) func() {
+		list.AddItem("ID: "+r.ID, "", blankRune, func(r db.Record) func() {
 			return func() {
 				flex.Clear()
 				flex.AddItem(list, 0, 1, false)

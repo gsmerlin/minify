@@ -1,11 +1,11 @@
 package ui
 
 import (
-	minify "github.com/gsmerlin/minify/pkg"
+	"github.com/gsmerlin/minify/internal/db"
 	"github.com/rivo/tview"
 )
 
-var results = make(chan []minify.Record, 1)
+var results = make(chan []db.Record, 1)
 
 func setReadMenu() {
 	menu.Clear()
@@ -22,7 +22,7 @@ func read() {
 	navigate(emptyView(), false)
 }
 
-func getReadText(r minify.Record) tview.Primitive {
+func getReadText(r db.Record) tview.Primitive {
 	text := tview.NewTextView()
 	text.SetTextAlign(tview.AlignCenter)
 	text.SetText(
@@ -66,7 +66,7 @@ func readAll(cb func()) {
 }
 
 func findRecord(id string, dest string, cb func()) {
-	results <- minify.Repo().Read(id, dest)
+	results <- db.GetLink(id, dest)
 	cb()
 }
 
@@ -86,7 +86,7 @@ func readResults() {
 	list := tview.NewList()
 	for _, r := range res {
 		var blankRune rune
-		list.AddItem("ID: "+r.ID, "", blankRune, func(r minify.Record) func() {
+		list.AddItem("ID: "+r.ID, "", blankRune, func(r db.Record) func() {
 			return func() {
 				flex.Clear()
 				flex.AddItem(list, 0, 1, true)
