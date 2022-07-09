@@ -66,7 +66,7 @@ func readAll(cb func()) {
 }
 
 func findRecord(id string, dest string, cb func()) {
-	res, _ := db.GetLink(id, dest)
+	res, _ := db.GetLink(id, "", dest)
 	results <- res
 	cb()
 }

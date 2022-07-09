@@ -20,6 +20,8 @@ type EditLinkOutput struct {
 func EditLink(w http.ResponseWriter, r *http.Request) {
 
 	var payload EditLinkInput
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if err := Decode(r.Body, &payload); err != nil {
 		logger.Error(err.Error())

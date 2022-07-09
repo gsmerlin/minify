@@ -12,7 +12,7 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 	link := r.RequestURI[1:]
 	logger.Info(fmt.Sprintf("Received request for: %v", link))
 	logger.Info("Checking if record exists...")
-	records, err := db.GetLink(link, "")
+	records, err := db.GetLink(link, "", "")
 	if err != nil {
 		logger.Error(err.Error())
 		w.WriteHeader(http.StatusInternalServerError)

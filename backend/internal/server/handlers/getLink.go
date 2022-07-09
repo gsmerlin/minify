@@ -14,9 +14,11 @@ type GetLinkOutput struct {
 }
 
 func GetLink(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-
-	records, err := db.GetLink(id, "")
+	email := r.URL.Query().Get("email")
+	logger.Info("Received request for " + email)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	records, err := db.GetLink("", email, "")
 
 	if err != nil {
 		logger.Error(err.Error())

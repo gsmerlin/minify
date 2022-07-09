@@ -19,6 +19,8 @@ type CreateLinkOutput struct {
 func CreateLink(w http.ResponseWriter, r *http.Request) {
 
 	var payload CreateLinkInput
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if err := Decode(r.Body, &payload); err != nil {
 		logger.Error(err.Error())

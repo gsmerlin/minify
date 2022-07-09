@@ -14,7 +14,7 @@ func favicon(w http.ResponseWriter, r *http.Request) {
 func routes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/delete", handlers.DeleteLink)
-	mux.HandleFunc("/get/", handlers.GetLink)
+	mux.HandleFunc("/get", handlers.GetLink)
 	mux.HandleFunc("/edit", handlers.EditLink)
 	mux.HandleFunc("/create", handlers.CreateLink)
 	mux.HandleFunc("/favicon.ico", favicon)
@@ -24,6 +24,6 @@ func routes() *http.ServeMux {
 
 func Start() error {
 	mux := routes()
-	logger.Info("Running server on port 3000")
-	return http.ListenAndServe(":3000", mux)
+	logger.Info("Running server on port 3001")
+	return http.ListenAndServe(":3001", mux)
 }

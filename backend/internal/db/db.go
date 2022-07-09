@@ -53,10 +53,10 @@ func NewLink(id string, email string, destination string) (string, error) {
 	return record.ID, nil
 }
 
-func GetLink(id string, destination string) ([]Record, error) {
+func GetLink(id string, email string, destination string) ([]Record, error) {
 	var records []Record
 
-	if id != "" && destination == "" {
+	if id != "" && destination == "" && email == "" {
 		result := r.First(&records, "id = ?", id)
 		if result.Error != nil {
 			return nil, result.Error
@@ -64,12 +64,20 @@ func GetLink(id string, destination string) ([]Record, error) {
 		return records, nil
 	}
 
-	if destination != "" && id == "" {
+	if destination != "" && id == "" && email == "" {
 		result := r.Find(&records, "destination = ?", destination)
 		if result.Error != nil {
 			return nil, result.Error
 		}
 
+		return records, nil
+	}
+
+	if email != "" && id == "" && destination == "" {
+		result := r.Find(&records, "email = ?", email)
+		if result.Error != nil {
+			return nil, result.Error
+		}
 		return records, nil
 	}
 

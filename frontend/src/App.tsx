@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import React, { Suspense } from "react";
+import { Navigation } from "./components/Navigation";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Navbar } from "./components/Navbar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const clientId =
+  "1072806869736-dirrf14sfk8u03o6a0jchh47hglaljs1.apps.googleusercontent.com";
 
+const queryClient = new QueryClient();
+
+const App: React.FC = () => (
+  <Suspense fallback="Loading...">
+    <GoogleOAuthProvider clientId={clientId}>
+      <QueryClientProvider client={queryClient}>
+        <Navbar />
+        <Navigation />
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
+  </Suspense>
+);
 export default App;
