@@ -11,7 +11,7 @@ import { usePopupValues } from "../../atoms/popup";
 
 export const Popup: React.FC = () => {
   const { title, content, open, actions } = usePopupValues();
-
+  console.log("I was called!", open);
   return (
     <Dialog open={open}>
       <DialogTitle>{title}</DialogTitle>

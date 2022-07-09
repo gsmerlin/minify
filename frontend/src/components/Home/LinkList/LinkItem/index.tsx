@@ -50,7 +50,7 @@ export const LinkItem = ({ link }: ILinkProps) => {
             </Button>
           </Tooltip>
           <Tooltip title="Delete Link">
-            <Button onClick={() => handlePageChange(Page.Edit, link.ID)}>
+            <Button onClick={() => handlePageChange(Page.Delete, link.ID)}>
               <Delete />
             </Button>
           </Tooltip>
