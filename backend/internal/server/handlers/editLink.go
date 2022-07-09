@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/gsmerlin/minify/backend/internal/db"
@@ -18,14 +19,17 @@ type EditLinkOutput struct {
 }
 
 func EditLink(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Access-Control-Allow-Methods", "PUT")
 
 	var payload EditLinkInput
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if err := Decode(r.Body, &payload); err != nil {
+		if err == io.EOF {
+			return
+		}
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 
@@ -35,7 +39,7 @@ func EditLink(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 
@@ -43,7 +47,7 @@ func EditLink(w http.ResponseWriter, r *http.Request) {
 
 	if err := Encode(w, output); err != nil {
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 }

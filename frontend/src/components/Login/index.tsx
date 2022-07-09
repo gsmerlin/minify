@@ -30,10 +30,6 @@ export const Login: React.FC = () => {
     setPage(Page.Home);
   };
 
-  const onError = () => {
-    console.log("Login failed");
-  };
-
   return (
     <Box
       display="flex"
@@ -58,7 +54,7 @@ export const Login: React.FC = () => {
         <Typography component="span" variant="h6" marginBottom="5px">
           Please log in using google to continue:
         </Typography>
-        <GoogleLogin onSuccess={onSuccess} onError={onError} />
+        <GoogleLogin onSuccess={onSuccess} />
       </Box>
     </Box>
   );

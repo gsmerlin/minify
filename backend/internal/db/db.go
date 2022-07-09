@@ -14,12 +14,13 @@ type Record struct {
 }
 
 type Analytics struct {
-	ID string
+	ID        string
+	Timestamp string `sql:"-"`
 }
+
 type Details struct {
-	ID          string
-	Destination string
-	Analytics   []Analytics
+	ID        string
+	Analytics []Analytics
 }
 
 var r *gorm.DB
@@ -35,7 +36,7 @@ func Start() {
 	logger.Info("Database connection successfully initialized")
 }
 
-func NewLink(id string, email string, destination string) (string, error) {
+func NewLink(id string, email string, destination string) (Record, error) {
 	if id == "" {
 		id = utils.RandSeq(3)
 	}
@@ -48,9 +49,9 @@ func NewLink(id string, email string, destination string) (string, error) {
 
 	result := r.Create(&record)
 	if result.Error != nil {
-		return "", result.Error
+		return Record{}, result.Error
 	}
-	return record.ID, nil
+	return record, nil
 }
 
 func GetLink(id string, email string, destination string) ([]Record, error) {
@@ -112,24 +113,26 @@ func DeleteLink(id string) (string, error) {
 }
 
 func AddAnalytics(id string) error {
-	result := r.Save(&Analytics{ID: id})
+	type Analytics struct {
+		ID string
+	}
+	result := r.Create(&Analytics{ID: id})
 	if result.Error != nil {
 		logger.Error(result.Error.Error())
 	}
 	return result.Error
 }
 
-func GetAnalytics(id string) Details {
+func GetAnalytics(id string) (Details, error) {
 
-	var record Record
 	var analytics []Analytics
 
-	r.First(&record, "ID = ?", id)
-	r.Find(&analytics, "ID = ?", id)
+	if res := r.Find(&analytics, "ID = ?", id); res.Error != nil {
+		return Details{}, res.Error
+	}
 
 	return Details{
-		ID:          record.ID,
-		Destination: record.Destination,
-		Analytics:   analytics,
-	}
+		ID:        id,
+		Analytics: analytics,
+	}, nil
 }

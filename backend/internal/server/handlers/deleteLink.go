@@ -12,10 +12,10 @@ type DeleteLinkOutput struct {
 }
 
 func DeleteLink(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE")
 
 	id := r.URL.Query().Get("id")
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	logger.Info("Deleting link for " + id)
 
@@ -34,4 +34,5 @@ func DeleteLink(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 }

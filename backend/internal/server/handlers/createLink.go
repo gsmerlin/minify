@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/gsmerlin/minify/backend/internal/db"
@@ -13,36 +14,39 @@ type CreateLinkInput struct {
 }
 
 type CreateLinkOutput struct {
-	ID string `json:"id"`
+	ID          string `json:"id"`
+	Email       string `json:"email"`
+	Destination string `json:"destination"`
 }
 
 func CreateLink(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Access-Control-Allow-Methods", "POST")
 
 	var payload CreateLinkInput
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if err := Decode(r.Body, &payload); err != nil {
+		if err == io.EOF {
+			return
+		}
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 
 	logger.Info("Creating link for " + payload.Email + " to " + payload.Destination)
 
-	id, err := db.NewLink("", payload.Email, payload.Destination)
+	record, err := db.NewLink("", payload.Email, payload.Destination)
 
 	if err != nil {
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 
-	output := CreateLinkOutput{ID: id}
-
-	if err := Encode(w, output); err != nil {
+	if err := Encode(w, record); err != nil {
 		logger.Error(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "` + err.Error() + `"}`))
 		return
 	}
 }

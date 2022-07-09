@@ -1,22 +1,14 @@
 import { atom, useAtomValue, useSetAtom } from "jotai";
-
-type PopupAction = {
-  name: string;
-  callback: () => void;
-};
+import React from "react";
 
 type PopupAtom = {
-  title: string;
-  content: string;
+  content: React.ReactNode;
   open: boolean;
-  actions: PopupAction[];
 };
 
-const INITIAL_POPUP: PopupAtom = {
-  title: "",
-  content: "",
+const INITIAL_POPUP = {
+  content: null,
   open: false,
-  actions: [],
 };
 
 const popupAtom = atom<PopupAtom>(INITIAL_POPUP);
@@ -25,26 +17,27 @@ export const usePopupValues = () => {
   return useAtomValue(popupAtom);
 };
 
+interface PopupClose {
+  close: true;
+  content?: never;
+}
+interface PopupContent {
+  close?: never;
+  content: React.ReactNode;
+}
+
+type CallPopup = PopupContent | PopupClose;
+
 export const useCallPopup = () => {
   const set = useSetAtom(popupAtom);
-  const setPopupInfos = (
-    title: string,
-    content: string,
-    actions: PopupAction[]
-  ) => {
-    const actionsWithClose: PopupAction[] = actions.map((action) => ({
-      ...action,
-      callback: () => {
-        action.callback();
-        set(INITIAL_POPUP);
-      },
-    }));
-    set({
-      title,
-      content,
-      open: true,
-      actions: actionsWithClose,
-    });
+  const setPopupInfos = (params: CallPopup) => {
+    if (params.close) {
+      set({ ...INITIAL_POPUP });
+      return;
+    }
+    if (params.content) {
+      set({ ...params, open: true });
+    }
   };
 
   return setPopupInfos;

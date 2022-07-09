@@ -13,6 +13,7 @@ func favicon(w http.ResponseWriter, r *http.Request) {
 
 func routes() *http.ServeMux {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/analytics", handlers.GetAnalytics)
 	mux.HandleFunc("/delete", handlers.DeleteLink)
 	mux.HandleFunc("/get", handlers.GetLink)
 	mux.HandleFunc("/edit", handlers.EditLink)

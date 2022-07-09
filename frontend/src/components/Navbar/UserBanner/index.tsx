@@ -15,12 +15,7 @@ export const UserBanner: React.FC = () => {
       alignItems="center"
       justifyContent="flex-end"
     >
-      <Box
-        display="inherit"
-        border="1px solid black"
-        borderRadius="5px"
-        padding="10px"
-      >
+      <Box display="inherit" borderRadius="5px" padding="10px">
         <Box display="flex" alignItems="center">
           <Avatar src={picture} />
         </Box>

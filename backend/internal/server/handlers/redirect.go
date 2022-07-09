@@ -9,6 +9,9 @@ import (
 )
 
 func Redirect(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
+
 	link := r.RequestURI[1:]
 	logger.Info(fmt.Sprintf("Received request for: %v", link))
 	logger.Info("Checking if record exists...")

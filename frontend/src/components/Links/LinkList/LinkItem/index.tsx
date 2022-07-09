@@ -1,42 +1,28 @@
 import { Box, Button, Tooltip, Typography } from "@mui/material";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
-import { Page, usePageActions } from "../../../../atoms/page";
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Visibility as AnalyticsIcon,
+} from "@mui/icons-material";
 import { Link, useLinkActions } from "../../atoms";
 import { useCallPopup } from "../../../../atoms/popup";
+import { Delete } from "../../Delete";
+import React from "react";
+import { Analytics } from "../../Analytics";
+import { Edit } from "../../Edit";
 
 interface ILinkProps {
   link: Link;
 }
 export const LinkItem = ({ link }: ILinkProps) => {
-  const { setPage } = usePageActions();
   const { setSelectedLink } = useLinkActions();
   const callPopup = useCallPopup();
 
-  const handlePageChange = (page: Page, id: string) => {
+  const handleButtons = (id: string, content: React.ReactNode) => {
     setSelectedLink(id);
-    setPage(page);
+    callPopup({ content });
   };
 
-  const handleDelete = (link: Link) => {
-    callPopup(
-      "Delete",
-      `Are you sure you want to delete www.minify.com/${link.ID}?`,
-      [
-        {
-          name: "Yes",
-          callback: () => {
-            console.log("Yes");
-          },
-        },
-        {
-          name: "No",
-          callback: () => {
-            console.log("No");
-          },
-        },
-      ]
-    );
-  };
   return (
     <Box display="flex" width="100%" marginBottom="5px" key={link.ID}>
       <Box
@@ -62,18 +48,18 @@ export const LinkItem = ({ link }: ILinkProps) => {
         </Box>
         <Box width="15%" display="inline-flex">
           <Tooltip title="View Analytics">
-            <Button onClick={() => handlePageChange(Page.Analytics, link.ID)}>
-              <Visibility />
+            <Button onClick={() => handleButtons(link.ID, <Analytics />)}>
+              <AnalyticsIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Edit Link">
-            <Button onClick={() => handlePageChange(Page.Edit, link.ID)}>
-              <Edit />
+            <Button onClick={() => handleButtons(link.ID, <Edit />)}>
+              <EditIcon />
             </Button>
           </Tooltip>
           <Tooltip title="Delete Link">
-            <Button onClick={() => handleDelete(link)}>
-              <Delete />
+            <Button onClick={() => handleButtons(link.ID, <Delete />)}>
+              <DeleteIcon />
             </Button>
           </Tooltip>
         </Box>
