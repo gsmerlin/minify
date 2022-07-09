@@ -2,6 +2,7 @@ import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { Edit, Delete, Visibility } from "@mui/icons-material";
 import { Page, usePageActions } from "../../../../atoms/page";
 import { Link, useLinkActions } from "../../atoms";
+import { useCallPopup } from "../../../../atoms/popup";
 
 interface ILinkProps {
   link: Link;
@@ -9,12 +10,33 @@ interface ILinkProps {
 export const LinkItem = ({ link }: ILinkProps) => {
   const { setPage } = usePageActions();
   const { setSelectedLink } = useLinkActions();
+  const callPopup = useCallPopup();
 
   const handlePageChange = (page: Page, id: string) => {
     setSelectedLink(id);
     setPage(page);
   };
 
+  const handleDelete = (link: Link) => {
+    callPopup(
+      "Delete",
+      `Are you sure you want to delete www.minify.com/${link.ID}?`,
+      [
+        {
+          name: "Yes",
+          callback: () => {
+            console.log("Yes");
+          },
+        },
+        {
+          name: "No",
+          callback: () => {
+            console.log("No");
+          },
+        },
+      ]
+    );
+  };
   return (
     <Box display="flex" width="100%" marginBottom="5px" key={link.ID}>
       <Box
@@ -50,7 +72,7 @@ export const LinkItem = ({ link }: ILinkProps) => {
             </Button>
           </Tooltip>
           <Tooltip title="Delete Link">
-            <Button onClick={() => handlePageChange(Page.Delete, link.ID)}>
+            <Button onClick={() => handleDelete(link)}>
               <Delete />
             </Button>
           </Tooltip>

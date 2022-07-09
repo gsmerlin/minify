@@ -1,6 +1,5 @@
 import React from "react";
 import { Page, usePage } from "../../atoms/page";
-import { Delete } from "../Delete";
 import { Home } from "../Home";
 import { Login } from "../Login";
 
@@ -11,13 +10,6 @@ export const Navigation: React.FC = () => {
       return <Home />;
     case Page.Login:
       return <Login />;
-    case Page.Delete:
-      return (
-        <>
-          <Delete />
-          <Home />
-        </>
-      );
     default:
       return <div>Unknown</div>;
   }
