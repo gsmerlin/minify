@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { Navigation } from "./components/Navigation";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Navbar } from "./components/Navbar";
+import { Popup } from "./components/Popup";
 
 const clientId =
   "1072806869736-dirrf14sfk8u03o6a0jchh47hglaljs1.apps.googleusercontent.com";
@@ -13,6 +14,7 @@ const App: React.FC = () => (
   <Suspense fallback="Loading...">
     <GoogleOAuthProvider clientId={clientId}>
       <QueryClientProvider client={queryClient}>
+        <Popup />
         <Navbar />
         <Navigation />
       </QueryClientProvider>

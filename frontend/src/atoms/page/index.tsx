@@ -7,6 +7,9 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 export enum Page {
   Login = "login",
   Home = "home",
+  Edit = "edit",
+  Delete = "delete",
+  Analytics = "analytics",
 }
 
 const pageAtom = atom<string>(Page.Login);
