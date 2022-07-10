@@ -39,7 +39,7 @@ import (
 				ii. Receives an ID of the link to be retrieved.
 				iii. Retrieves the link from the database.
 				iv. Returns the link information.
-			d) /analytics/?:link (***TO-DO***)
+			d) /analytics/?:link (DONE)
 				i. GET;
 				ii. Receives an ID of the link to be retrieved.
 				iii. Retrieves the analytics from the database.

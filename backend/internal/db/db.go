@@ -26,6 +26,9 @@ type Details struct {
 var r *gorm.DB
 
 func Start() {
+	if r != nil {
+		return
+	}
 	logger.Info("Initializing database connection...")
 	dsn := "root:root@tcp(127.0.0.1:3306)/minify?charset=utf8mb4&parseTime=True&loc=Local"
 	var err error
